@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'poppins', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .container {
+            height: 100vh;
+            background: #e3f9ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calculator {
+            background: #3a4452;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .calculator form input {
+            border: 0;
+            outline: 0;
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            box-shadow: -8px -8px 15px rgba(255, 255, 255, 0.1);
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .calculator form .display {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0px;
+        }
+
+        .calculator form .display input {
+            text-align: center;
+            flex: 1;
+            font-size: 45px;
+            box-shadow: none;
+        }
+
+        .calculator form input.equal {
+            width: 145px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="calculator">
+        <form>
+            <div class="display"><input type="text" name="display" id="display"></div>
+            <div>
+                <input type="button" value="C" onclick="clearDisplay()">
+                <input type="button" value="D" onclick="deleteDisplay()">
+                <input type="button" value="." onclick="appendToDisplay('.')">
+                <input type="button" value="*" onclick="appendToDisplay('*')">
+            </div>
+            <div>
+                <input type="button" value="7" onclick="appendToDisplay('7')">
+                <input type="button" value="8" onclick="appendToDisplay('8')">
+                <input type="button" value="9" onclick="appendToDisplay('9')">
+                <input type="button" value="/" onclick="appendToDisplay('/')">
+            </div>
+            <div>
+                <input type="button" value="4" onclick="appendToDisplay('4')">
+                <input type="button" value="5" onclick="appendToDisplay('5')">
+                <input type="button" value="6" onclick="appendToDisplay('6')">
+                <input type="button" value="-" onclick="appendToDisplay('-')">
+            </div>
+            <div>
+                <input type="button" value="1" onclick="appendToDisplay('1')">
+                <input type="button" value="2" onclick="appendToDisplay('2')">
+                <input type="button" value="3" onclick="appendToDisplay('3')">
+                <input type="button" value="+" onclick="appendToDisplay('+')">
+            </div>
+            <div>
+                <input type="button" value="0" onclick="appendToDisplay('0')">
+                <input type="button" value="00" onclick="appendToDisplay('00')">
+                <input type="button" value="=" class="equal" onclick="calculate()">
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function appendToDisplay(value) {
+        document.getElementById('display').value += value;
+    }
+
+    function clearDisplay() {
+        document.getElementById('display').value = '';
+    }
+
+    function deleteDisplay() {
+        const currentDisplayValue = document.getElementById('display').value;
+        document.getElementById('display').value = currentDisplayValue.slice(0, -1);
+    }
+
+    function evaluateExpression(expression) {
+        const sanitizedExpression = expression.replace(/[^-()\d/*+.]/g, '');
+        return new Function('return ' + sanitizedExpression)();
+    }
+
+    function calculate() {
+        const currentDisplayValue = document.getElementById('display').value;
+        try {
+            const result = evaluateExpression(currentDisplayValue);
+            document.getElementById('display').value = result;
+        } catch (error) {
+            alert("Invalid expression");
+        }
+    }
+</script>
+</body>
+</html>
